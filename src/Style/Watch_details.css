@@ -1,0 +1,170 @@
+/* =========================
+   WATCH DETAILS
+========================= */
+.watch-details {
+  margin-top: 100px;
+  color: #fff;
+}
+
+/* =========================
+   IMAGE SECTION
+========================= */
+.image-box {
+  background: #f5f5f5;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.image-box img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+}
+
+/* Thumbnail row */
+.img-thumbnail {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* =========================
+   PRODUCT INFO
+========================= */
+.product-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+.badge {
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.price-section,
+.d-flex.align-items-center {
+  gap: 12px;
+}
+
+.price {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.old-price {
+  font-size: 18px;
+  text-decoration: line-through;
+  color: #888;
+}
+
+.discount {
+  font-weight: 600;
+  color: #d4af37;
+}
+
+.tax-text {
+  font-size: 13px;
+  color: #aaa;
+}
+
+/* =========================
+   QUANTITY
+========================= */
+.quantity-box,
+.d-flex.align-items-center.gap-2 {
+  gap: 10px;
+}
+
+.quantity-box button {
+  width: 36px;
+  height: 36px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn-dark {
+  padding: 10px 25px;
+}
+
+.buy-now {
+  background: #d4af37;
+  color: #000;
+  border: none;
+  padding: 10px 28px;
+  font-weight: 600;
+}
+
+.buy-now:hover {
+  background: #b89a2f;
+}
+
+/* =========================
+   ADDRESS FORM
+========================= */
+.address-form {
+  background: #111;
+  border-radius: 10px;
+}
+
+.address-form input {
+  background: #111;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+.address-form input::placeholder {
+  color: #aaa;
+}
+
+/* =========================
+   FEATURES
+========================= */
+.row-cols-2 div {
+  font-size: 14px;
+}
+
+/* =========================
+   RESPONSIVE FIXES
+========================= */
+@media (max-width: 768px) {
+  .watch-details {
+    margin-top: 80px;
+  }
+
+  .product-title {
+    font-size: 22px;
+  }
+
+  .price {
+    font-size: 22px;
+  }
+
+  .old-price {
+    font-size: 16px;
+  }
+
+  .image-box img {
+    max-height: 260px;
+  }
+
+  .btn-dark,
+  .buy-now {
+    width: 100%;
+  }
+
+  .d-flex.gap-2.flex-wrap {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-title {
+    font-size: 20px;
+  }
+
+  .row-cols-2 {
+    row-gap: 6px;
+  }
+}

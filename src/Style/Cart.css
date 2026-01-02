@@ -1,0 +1,118 @@
+/* =========================
+   CART CONTAINER
+========================= */
+
+.cart {
+  color: #111;
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 10px;
+}
+.col-5 h3{
+  color:#d4af37 ;
+  font-weight: bold;
+}
+.cart img {
+  max-height: 120px;
+  object-fit: contain;
+}
+
+.address-form {
+  background-color: #ffffff;
+  color: #111;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.address-form h5 {
+  margin-bottom: 15px;
+}
+
+.address-form input {
+  background-color: #fff;
+  color: #111;
+  border: 1px solid #ccc;
+}
+
+.address-form input::placeholder {
+  color: #666;
+}
+
+.address-form input:focus {
+  background-color: #fff;
+  color: #111;
+  border-color: #198754;
+  box-shadow: none;
+}
+
+/* =========================
+   PRICE STYLE
+========================= */
+
+.text-muted {
+  color: #6c757d !important;
+  text-align: left;
+  text-decoration: line-through;
+}
+/* =========================
+   QUANTITY CONTROLS
+========================= */
+
+.qty-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  background-color:  #0d6efd;
+  color: #111;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.qty-btn:hover {
+  background-color: #e9ecef;
+}
+
+.qty-value {
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .cart img {
+    max-height: 90px;
+  }
+
+  .cart h5 {
+    font-size: 16px;
+  }
+
+  .cart .d-flex {
+    flex-direction: column;
+  }
+  .col-5 h2{
+    font-size:17px;
+  }
+   .col-5 h3{
+    font-size:15px;
+  }
+  .col-5 p{
+    font-size:12px;
+  }
+  .btn-remove{
+    font-size:10px;
+  }
+}

@@ -1,0 +1,41 @@
+{
+    "Watches":[
+        
+           {
+            "id": 1,
+            "name": "Chronograph Elite",
+            "category":"ROYAL COLLECTION",
+            "brand": "Apple",
+            "price":2000 ,
+            "oldPrice":5000,
+            "discount": "13%",
+            "rating": 4.7,
+            "reviewCount": 523,
+            "inStock": true,
+            "image": "watch-1.jpg",
+            "gallery": [
+                "/images/watch.png",
+                "/images/sss.jpg"
+            ]
+        
+},
+ {
+            "id": 2,
+            "name":"Golden Heritage",
+            "category":"CLASSIC COLLECTION",
+            "brand": "Apple",
+            "price":5000 ,
+            "oldPrice":6000,
+            "discount": "13%",
+            "rating": 4.7,
+            "reviewCount": 523,
+            "inStock": true,
+            "image": "watch-2.jpg",
+            "gallery": [
+                "/images/watch.png",
+                "/images/sss.jpg"
+            ]
+        
+}
+    ]
+}

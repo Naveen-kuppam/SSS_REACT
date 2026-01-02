@@ -1,0 +1,36 @@
+body{
+  background-color: black;
+  position: relative;
+  font-family: 'Times New Roman', Times, serif;
+}
+.navbar{
+  background-color:black ;
+
+}
+.navbar-brand img{
+  width:50px;
+}
+.nav-item a {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+.nav-item a:hover{
+  color: yellow;
+}
+.nav-icons{
+   color: white;
+  font-size: 20px;
+  font-weight: bold;
+  
+}
+.nav-icons:hover{
+    color: yellow;
+}
+
+.text-section {
+  color: white;
+}
+.offCanvas{
+  width:400px;
+}

@@ -1,0 +1,169 @@
+
+.about-home {
+  height: 60vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top:40px;
+}
+
+.about-home::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.about-subtitle,
+.about-heading {
+  position: relative;
+  z-index: 2;
+}
+
+.about-subtitle {
+  color: #d4af37;
+  letter-spacing: 3px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.about-heading {
+  font-size: 52px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.about-heading span {
+  color: #d4af37;
+}
+
+.stat-box {
+  background: #111;
+  padding: 30px 20px;
+  border-radius: 12px;
+  transition: 0.3s ease;
+}
+
+.stat-box:hover {
+  transform: translateY(-8px);
+}
+
+.stat-icon {
+  font-size: 36px;
+  color: #d4af37;
+  margin-bottom: 10px;
+}
+
+.stat-number {
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.stat-text {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.content-container {
+  max-width: 900px;
+  margin: 80px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.content-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #fff;
+}
+
+.content-title span {
+  color: #d4af37;
+}
+
+.content-container p {
+  color: #ccc;
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 18px;
+}
+
+.values-section {
+  background: #0b0b0b;
+}
+
+.values-title {
+  color: #fff;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.value-card {
+  background: #111;
+  border-radius: 14px;
+  transition: 0.3s ease;
+}
+
+.value-card h4 {
+  color: #d4af37;
+  font-size: 20px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.value-card p {
+  color: #bbb;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.value-card:hover {
+  transform: translateY(-8px);
+}
+
+@media (max-width: 992px) {
+  .about-heading {
+    font-size: 42px;
+  }
+
+  .content-title,
+  .values-title {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-home {
+    height: 50vh;
+  }
+
+  .about-heading {
+    font-size: 34px;
+  }
+
+  .content-container {
+    margin: 60px auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .about-heading {
+    font-size: 28px;
+  }
+
+  .stat-number {
+    font-size: 26px;
+  }
+
+  .content-title,
+  .values-title {
+    font-size: 22px;
+  }
+}
