@@ -58,10 +58,11 @@ function Collections() {
   /* ================= API ================= */
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/watches/")
+      .get("/watches/")
       .then((res) => {
-        setWatches(res.data);
-        setSearchedWatches(res.data);
+        const data = Array.isArray(res.data) ? res.data : [];
+        setWatches(data);
+        setSearchedWatches(data);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -81,16 +82,31 @@ function Collections() {
   };
 
   /* ================= FILTER ================= */
-  const filteredWatches = searchedWatches.filter((watch) => {
-    if (filters.category.length && !filters.category.includes(watch.category))
-      return false;
-    if (filters.gender.length && !filters.gender.includes(watch.gender))
-      return false;
-    if (filters.strap.length && !filters.strap.includes(watch.strap))
-      return false;
-    if (watch.price > filters.price) return false;
-    return true;
-  });
+  const filteredWatches = Array.isArray(searchedWatches)
+    ? searchedWatches.filter((watch) => {
+        if (
+          filters.category.length &&
+          !filters.category.includes(watch.category)
+        )
+          return false;
+
+        if (
+          filters.gender.length &&
+          !filters.gender.includes(watch.gender)
+        )
+          return false;
+
+        if (
+          filters.strap.length &&
+          !filters.strap.includes(watch.strap)
+        )
+          return false;
+
+        if (watch.price > filters.price) return false;
+
+        return true;
+      })
+    : [];
 
   return (
     <div>
@@ -116,7 +132,10 @@ function Collections() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             />
-            <button className="btn btn-warning search-btn" onClick={handleSearch}>
+            <button
+              className="btn btn-warning search-btn"
+              onClick={handleSearch}
+            >
               <i className="bi bi-search"></i>
             </button>
           </div>
@@ -142,13 +161,12 @@ function Collections() {
                 <div className="watch-image">
                   <Link to={`/watch/${watch.id}`}>
                     <img
-                      src={`http://127.0.0.1:8000${watch.image}`}
+                      src={watch.image}
                       className="card-img-top"
                       alt={watch.name}
                     />
                   </Link>
 
-                  
                   <button
                     className="button-2"
                     onClick={() => handleAddToCart(watch)}
@@ -166,7 +184,9 @@ function Collections() {
             </div>
           ))}
 
-          {filteredWatches.length === 0 && <h4>No products found</h4>}
+          {filteredWatches.length === 0 && (
+            <h4>No products found</h4>
+          )}
         </div>
       </div>
     </div>
