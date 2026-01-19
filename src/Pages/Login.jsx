@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../Style/Login.css";
 
@@ -12,81 +11,43 @@ function AuthForm() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setMessage("");
 
-    try {
-      if (mode === "register") {
-        const res = await axios.post("/register/", {
-          username,
-          email,
-          password1: password,
-          password2: password,
-        });
-
-        setMessage(res.data.message);
-        setMode("login");
-      } else if (mode === "login") {
-        const res = await axios.post("/login/", {
-          username,
-          password,
-        });
-
-        setMessage(res.data.message || "Login successful");
-
-        if (res.data.access) {
-          localStorage.setItem("token", res.data.access);
-        }
-
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            id: res.data.user?.id,
-            username: res.data.user?.username || username,
-          })
-        );
-
-        navigate("/home");
-      } else if (mode === "forgot") {
-        setMessage("Forgot password API not connected yet");
-      }
-    } catch (err) {
-      setMessage(
-        err.response?.data?.error ||
-        err.response?.data?.message ||
-        "Invalid username or password"
-      );
-    }
-  };
-
-  // ================== ADD TO CART FUNCTION ==================
-  const addToCart = async (watchId, quantity = 1) => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        alert("Please login to add items to cart");
+    // ===== REGISTER =====
+    if (mode === "register") {
+      if (!username || !email || !password) {
+        setMessage("All fields are required");
         return;
       }
 
-      const res = await fetch("/api/cart/add/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, 
-        },
-        body: JSON.stringify({ watch_id: watchId, quantity }),
-      });
+      const user = { username, email, password };
+      localStorage.setItem("user", JSON.stringify(user));
 
-      const data = await res.json();
-      if (res.ok) {
-        alert(data.message || "Item added to cart");
+      setMessage("Registration successful. Please login.");
+      setMode("login");
+    }
+
+    // ===== LOGIN =====
+    else if (mode === "login") {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+
+      if (
+        storedUser &&
+        storedUser.username === username &&
+        storedUser.password === password
+      ) {
+        localStorage.setItem("isLoggedIn", "true");
+        navigate("/home");
       } else {
-        alert(data.error || "Failed to add item");
+        setMessage("Invalid username or password");
       }
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong while adding to cart");
+    }
+
+    // ===== FORGOT PASSWORD =====
+    else if (mode === "forgot") {
+      setMessage("Password reset is not available (frontend only)");
     }
   };
 

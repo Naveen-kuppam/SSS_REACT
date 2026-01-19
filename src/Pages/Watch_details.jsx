@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "../Style/Watch_details.css";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import FooterSection from "../components/FooterSection";
+import ContactSection from "../components/ContactSection";
 
 function WatchDetails() {
   const { id } = useParams();
@@ -11,6 +12,9 @@ function WatchDetails() {
 
   const [watch, setWatch] = useState(null);
   const [cart, setCart] = useState([]);
+  const [watches, setWatches] = useState([]); // all watches for collection
+  const [showAddress, setShowAddress] = useState(false);
+
   const [address, setAddress] = useState({
     house: "",
     area: "",
@@ -18,124 +22,118 @@ function WatchDetails() {
     state: "",
     pincode: "",
   });
-  const [showAddress, setShowAddress] = useState(false);
 
+  /* ================= FETCH WATCH ================= */
   useEffect(() => {
     axios
-      .get(`/watches/${id}/`)
-      .then((res) => setWatch(res.data))
+      .get("http://localhost:4000/Watches")
+      .then((res) => {
+        const found = res.data.find((w) => String(w.id) === String(id));
+        setWatch(found);
+        setWatches(res.data); // save all watches for collection
+      })
       .catch((err) => console.error(err));
   }, [id]);
 
+  /* ================= LOAD CART ================= */
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(stored);
   }, []);
 
+  /* ================= CART HELPERS ================= */
   const updateCart = (updated) => {
     setCart(updated);
     localStorage.setItem("cart", JSON.stringify(updated));
   };
 
-  const addToCart = () => {
-    const exists = cart.find((i) => i.id === watch.id);
-    if (exists) increment(watch.id);
-    else updateCart([...cart, { ...watch, qty: 1 }]);
-    navigate("/Cart/");
-  };
-
   const increment = (id) => {
-    const exists = cart.find((i) => i.id === id);
-    if (exists) {
-      updateCart(
-        cart.map((i) =>
-          i.id === id ? { ...i, qty: (i.qty || 1) + 1 } : i
-        )
-      );
-    } else {
-      updateCart([...cart, { ...watch, qty: 1 }]);
-    }
+    updateCart(
+      cart.map((i) => (i.id === id ? { ...i, qty: (i.qty || 1) + 1 } : i))
+    );
   };
 
   const decrement = (id) => {
-    const exists = cart.find((i) => i.id === id);
-    if (exists) {
-      updateCart(
-        cart.map((i) =>
-          i.id === id ? { ...i, qty: i.qty > 1 ? i.qty - 1 : 0 } : i
-        ).filter((i) => i.qty > 0)
-      );
-    }
+    updateCart(
+      cart
+        .map((i) => (i.id === id ? { ...i, qty: i.qty - 1 } : i))
+        .filter((i) => i.qty > 0)
+    );
   };
 
+  const addToCart = (item = watch) => {
+    const exists = cart.find((i) => i.id === item.id);
+    if (exists) increment(item.id);
+    else updateCart([...cart, { ...item, qty: 1 }]);
+    navigate("/Cart");
+  };
+
+  /* ================= ADDRESS ================= */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAddress((prev) => ({ ...prev, [name]: value }));
   };
 
-            if (!watch) return <p className="text-center mt-5 text-white">Loading...</p>;
-          const currentQty = cart.find((i) => i.id === watch.id)?.qty || 1;
-            const imageUrl = `${watch.image}`;
-            const message = `Hello, I want to buy this watch 
-          Name: ${watch.name}
-          Watch_ID:${watch.id}
-          Items:${currentQty}
-          Price: ₹${watch.price*currentQty}
-          Watch Image: ${imageUrl}
-          Delivery Address:
-          House: ${address.house}, Area: ${address.area}, District: ${address.district}, State: ${address.state}, Pincode: ${address.pincode}`;
+  if (watch === null)
+    return <p className="text-center mt-5 text-white">Loading...</p>;
 
-  const whatsappLink = `https://wa.me/9959187411?text=${encodeURIComponent(message)}`;
+  if (!watch)
+    return <p className="text-center mt-5 text-danger">Watch not found</p>;
 
-  
+  const currentQty = cart.find((i) => i.id === watch.id)?.qty || 1;
+
+  const whatsappMessage = `Hello, I want to buy this watch
+Name: ${watch.name}
+Watch ID: ${watch.id}
+Quantity: ${currentQty}
+Total Price: ₹${watch.price * currentQty}
+
+Delivery Address:
+House: ${address.house}
+Area: ${address.area}
+District: ${address.district}
+State: ${address.state}
+Pincode: ${address.pincode}`;
+
+  const whatsappLink = `https://wa.me/9392655416?text=${encodeURIComponent(
+    whatsappMessage
+  )}`;
 
   return (
     <>
       <Navbar />
 
-      <div className="container watch-details  text-white">
+      {/* WATCH DETAILS */}
+      <div className="container watch-details text-white">
         <div className="row g-4">
-        
+          {/* IMAGE */}
           <div className="col-md-6">
             <div className="image-box mb-3">
-              <img src={imageUrl} alt={watch.name} className="img-fluid rounded" />
+              <img src={watch.image} alt={watch.name} className="img-fluid rounded" />
             </div>
+
             <div className="d-flex gap-2">
               {[...Array(3)].map((_, i) => (
                 <img
                   key={i}
-                  src={imageUrl}
+                  src={watch.image}
                   alt=""
                   className="img-thumbnail"
-                  style={{ width: "70px", cursor: "pointer" }}
+                  style={{ width: "50px", cursor: "pointer" }}
                 />
               ))}
             </div>
           </div>
 
-        
+          {/* DETAILS */}
           <div className="col-md-6">
             <span className="badge bg-warning text-dark mb-2">NEW ARRIVAL</span>
-            <h2 className="product-title text-white">{watch.name}</h2>
-            <p className="text-secondary fs-4">{watch.brand} for {watch.gender}</p>
+            <h2 className="product-title">{watch.name}</h2>
+            <h3 className="text-secondary">{watch.brand} for {watch.gender}</h3>
+            <h4>₹{watch.price}    </h4>
+            <h5 className="text-secondary text-decoration-line-through">{watch.oldPrice}</h5>
 
-            <div className="d-flex align-items-center gap-3 mb-2">
-              <span className="h4 text-white">₹{watch.price}</span>
-              {watch.oldPrice && (
-                <>
-                  <span className="text-secondary text-decoration-line-through">₹{watch.oldPrice}</span>
-                  <span className="text-warning fw-bold">
-                    {watch.discount}% Off
-                  </span>
-                </>
-              )}
-            </div>
-
-            <p className="text-secondary small">(inclusive of all taxes)</p>
-
-           
-            <div className="row">
-              <div className="col">
+            {/* QTY */}
             <div className="d-flex align-items-center gap-2 mb-3">
               <button
                 className="btn btn-outline-light btn-sm"
@@ -145,63 +143,51 @@ function WatchDetails() {
                 -
               </button>
               <span>{currentQty}</span>
-              
               <button
                 className="btn btn-outline-light btn-sm"
                 onClick={() => increment(watch.id)}
               >
                 +
               </button>
-              </div>
-              <div className="col">
-             <h4 className=""><span className="text-secondary">Subtotal:</span> ₹{watch.price*currentQty}</h4>
-            </div>
-            </div>
             </div>
 
-           
-            <div className="d-flex gap-2 flex-wrap mb-3">
-              <button className="btn btn-dark" onClick={addToCart}>Add to Cart</button>
+            <h5><span className="text-secondary">Subtotal: </span>₹{watch.price * currentQty}</h5>
+
+            {/* ACTIONS */}
+            <div className="d-flex gap-2 mb-3">
+              <button className="btn btn-dark" onClick={() => addToCart(watch)}>
+                Add to Cart
+              </button>
               {!showAddress && (
-                <button className="btn buy-now" onClick={() => setShowAddress(true)}>Buy Now via WhatsApp</button>
+                <button className="btn buy-now" onClick={() => setShowAddress(true)}>
+                  Buy Now via WhatsApp
+                </button>
               )}
             </div>
 
-            
-           {showAddress && (
-  <div className="address-form p-3 bg-dark rounded mb-3 text-white">
-    <h5 className="mb-3 text-light">Enter Delivery Address</h5>
+            {/* ADDRESS FORM */}
+            {showAddress && (
+              <div className="address-form p-3 bg-dark rounded mb-3">
+                {Object.keys(address).map((field) => (
+                  <input
+                    key={field}
+                    name={field}
+                    placeholder={field.toUpperCase()}
+                    className="form-control mb-2 bg-dark text-white"
+                    onChange={handleChange}
+                  />
+                ))}
+                <div className="d-flex gap-2">
+                  <button className="btn btn-secondary w-50" onClick={() => setShowAddress(false)}>
+                    Back
+                  </button>
+                  <a href={whatsappLink} target="_blank" rel="noreferrer" className="w-50">
+                    <button className="btn btn-success w-100">Send Order</button>
+                  </a>
+                </div>
+              </div>
+            )}
 
-    {["house", "area", "district", "state", "pincode"].map((field) => (
-      <input
-        key={field}
-        name={field}
-        placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-        onChange={handleChange}
-        className="form-control mb-2 bg-dark text-white border-light"
-      />
-    ))}
-
-    <div className="d-flex gap-2 mt-2">
-     
-      <button
-        className="btn btn-secondary w-50"
-        onClick={() => setShowAddress(false)}
-      >
-        Back
-      </button>
-
-      
-      <a href={whatsappLink} target="_blank" rel="noreferrer" className="w-50">
-        <button className="btn btn-success w-100 ">
-          Send Order on WhatsApp
-        </button>
-      </a>
-    </div>
-  </div>
-)}
-
-            
             <div className="row row-cols-2 g-2 mt-3 text-white">
               <div className="col">✔ 6 Months Warranty</div>
               <div className="col">✔ 7 Days Return</div>
@@ -211,47 +197,36 @@ function WatchDetails() {
           </div>
         </div>
       </div>
+
+      {/* OUR COLLECTION */}
       <div>
         <p className="collection-title text-warning">OUR COLLECTION</p>
-
-
-                <div className="container">
-                    <div className="row text-center ">
-
-                    {cart.map((watch) => (
-                        <div className="col-lg-3 col-md-6 mb-4" key={watch.id}>
-                        <div className="watch-card">
-
-                        
-                            <div className="watch-image">
-                            <Link to={`/watch/${watch.id}`}>
-                                <img  src={`${watch.image}`} alt={watch.name} />
-                            </Link>
-
-                        <button className="button-2"onClick={() => handleAddToCart(watch)}>
-                                <i className="bi bi-bag"></i> Add to Cart</button>
-
-                </div>
-
-               
-                <div className="watch-content">
-                  <h6 className="collection">{watch.category}</h6>
-                  <h5 className="name">{watch.name}</h5>
-
-                  <div className="price-row text-center ">
-                    <span className="price ">₹ {watch.price}</span>
-                    <span className="old-price text-end">₹ {watch.oldPrice}</span>
+        <div className="container">
+          <div className="row text-center mt-4">
+            {watches.map((w) => (
+              <div className="col-md-3 mb-4" key={w.id}>
+                <div className="card watch-card">
+                  <div className="watch-image">
+                    <Link to={`/watch/${w.id}`}>
+                      <img src={w.image} className="card-img-top" alt={w.name} />
+                    </Link>
+                    <button className="button-2" onClick={() => addToCart(w)}>
+                      <i className="bi bi-bag"></i> Add to Cart
+                    </button>
+                  </div>
+                  <div className="card-body watch-content mt-2">
+                    <h6>{w.category}</h6>
+                    <h5>{w.name}</h5>
+                    <p>₹ {w.price}</p>
                   </div>
                 </div>
-
               </div>
-            </div>
-          ))}
-
+            ))}
+          </div>
         </div>
-        </div>
-        </div>
-      
+      </div>
+      <ContactSection />
+      <FooterSection />
     </>
   );
 }

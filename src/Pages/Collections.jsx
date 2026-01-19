@@ -5,11 +5,41 @@ import Filter from "../components/Filter";
 import aboutImg from "../assets/watch-5.jpg";
 import axios from "axios";
 import "../Style/Collections.css";
+import FooterSection from "../components/FooterSection";
+import ContactSection from "../components/ContactSection";
+
+const API_URL = "http://localhost:4000/Watches";
 
 function Collections() {
   const navigate = useNavigate();
 
-  /* ================= ADD TO CART (USER BASED) ================= */
+  /* ================= STATES ================= */
+  const [watches, setWatches] = useState([]);
+  const [searchedWatches, setSearchedWatches] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showFilter, setShowFilter] = useState(false);
+
+  const [filters, setFilters] = useState({
+    category: [],
+    gender: [],
+    strap: [],
+    price: 200000,
+  });
+
+  /* ================= FETCH WATCHES ================= */
+  useEffect(() => {
+    axios
+      .get(API_URL)
+      .then((res) => {
+        setWatches(res.data);
+        setSearchedWatches(res.data);
+      })
+      .catch((err) =>
+        console.error("Error fetching watches:", err)
+      );
+  }, []);
+
+  /* ================= ADD TO CART ================= */
   const addToCart = (item) => {
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -19,53 +49,22 @@ function Collections() {
     }
 
     const cartKey = `cart_${user.id}`;
-    const existingCart =
+    const cart =
       JSON.parse(localStorage.getItem(cartKey)) || [];
 
-    const itemIndex = existingCart.findIndex(
+    const index = cart.findIndex(
       (i) => i.id === item.id
     );
 
-    if (itemIndex !== -1) {
-      existingCart[itemIndex].qty =
-        (existingCart[itemIndex].qty || 1) + 1;
+    if (index !== -1) {
+      cart[index].qty += 1;
     } else {
-      existingCart.push({ ...item, qty: 1 });
+      cart.push({ ...item, qty: 1 });
     }
 
-    localStorage.setItem(cartKey, JSON.stringify(existingCart));
-    alert("Added to cart");
-  };
-
-  const handleAddToCart = (watch) => {
-    addToCart(watch);
+    localStorage.setItem(cartKey, JSON.stringify(cart));
     navigate("/Cart");
   };
-
-  /* ================= STATES ================= */
-  const [watches, setWatches] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchedWatches, setSearchedWatches] = useState([]);
-  const [showFilter, setShowFilter] = useState(false);
-
-  const [filters, setFilters] = useState({
-    category: [],
-    gender: [],
-    strap: [],
-    price: 10000,
-  });
-
-  /* ================= API ================= */
-  useEffect(() => {
-    axios
-      .get("/watches/")
-      .then((res) => {
-        const data = Array.isArray(res.data) ? res.data : [];
-        setWatches(data);
-        setSearchedWatches(data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   /* ================= SEARCH ================= */
   const handleSearch = () => {
@@ -75,43 +74,46 @@ function Collections() {
     }
 
     const results = watches.filter((watch) =>
-      watch.name.toLowerCase().includes(searchQuery.toLowerCase())
+      watch.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
     );
 
     setSearchedWatches(results);
   };
 
   /* ================= FILTER ================= */
-  const filteredWatches = Array.isArray(searchedWatches)
-    ? searchedWatches.filter((watch) => {
-        if (
-          filters.category.length &&
-          !filters.category.includes(watch.category)
-        )
-          return false;
+  const filteredWatches = searchedWatches.filter(
+    (watch) => {
+      if (
+        filters.category.length &&
+        !filters.category.includes(watch.category)
+      )
+        return false;
 
-        if (
-          filters.gender.length &&
-          !filters.gender.includes(watch.gender)
-        )
-          return false;
+      if (
+        filters.gender.length &&
+        !filters.gender.includes(watch.gender)
+      )
+        return false;
 
-        if (
-          filters.strap.length &&
-          !filters.strap.includes(watch.strap)
-        )
-          return false;
+      if (
+        filters.strap.length &&
+        !filters.strap.includes(watch.strap)
+      )
+        return false;
 
-        if (watch.price > filters.price) return false;
+      if (watch.price > filters.price) return false;
 
-        return true;
-      })
-    : [];
+      return true;
+    }
+  );
 
   return (
     <div>
       <Navbar />
 
+      {/* HERO */}
       <div
         className="Shop-home"
         style={{ backgroundImage: `url(${aboutImg})` }}
@@ -122,6 +124,8 @@ function Collections() {
       </div>
 
       <div className="container mt-4">
+
+        {/* SEARCH + FILTER */}
         <div className="search-filter-wrapper">
           <div className="input-group mb-4">
             <input
@@ -129,8 +133,12 @@ function Collections() {
               className="form-control"
               placeholder="Search watches..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              onChange={(e) =>
+                setSearchQuery(e.target.value)
+              }
+              onKeyDown={(e) =>
+                e.key === "Enter" && handleSearch()
+              }
             />
             <button
               className="btn btn-warning search-btn"
@@ -150,13 +158,20 @@ function Collections() {
 
         {showFilter && (
           <div className="filter-box">
-            <Filter filters={filters} setFilters={setFilters} />
+            <Filter
+              filters={filters}
+              setFilters={setFilters}
+            />
           </div>
         )}
 
+        {/* PRODUCTS */}
         <div className="row text-center mt-4">
           {filteredWatches.map((watch) => (
-            <div className="col-md-3 mb-4" key={watch.id}>
+            <div
+              className="col-md-3 mb-4"
+              key={watch.id}
+            >
               <div className="card watch-card">
                 <div className="watch-image">
                   <Link to={`/watch/${watch.id}`}>
@@ -169,7 +184,7 @@ function Collections() {
 
                   <button
                     className="button-2"
-                    onClick={() => handleAddToCart(watch)}
+                    onClick={() => addToCart(watch)}
                   >
                     <i className="bi bi-bag"></i> Add to Cart
                   </button>
@@ -178,7 +193,7 @@ function Collections() {
                 <div className="card-body watch-content mt-2">
                   <h6>{watch.category}</h6>
                   <h5>{watch.name}</h5>
-                  <p>₹{watch.price}</p>
+                  <p>₹ {watch.price}</p>
                 </div>
               </div>
             </div>
@@ -189,7 +204,11 @@ function Collections() {
           )}
         </div>
       </div>
+      <ContactSection />
+      <FooterSection />
     </div>
+    
+    
   );
 }
 

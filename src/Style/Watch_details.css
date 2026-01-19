@@ -167,4 +167,7 @@
   .row-cols-2 {
     row-gap: 6px;
   }
+  .buy-now {
+    padding:5px 15px;
+  }
 }

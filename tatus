@@ -1,0 +1,11 @@
+[33mcommit 81e6529478ad8ca1b44e4cf5a10f8dd779ab9369[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: unknown <saiikiranboddea8142@gmail.com>
+Date:   Fri Jan 9 12:36:51 2026 +0530
+
+    Initial commit
+
+[33mcommit ae2308b8d0b6e1c25988dd3df3ad938bc82bf746[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: unknown <saiikiranboddea8142@gmail.com>
+Date:   Fri Jan 2 11:09:20 2026 +0530
+
+    Frontend setup with Vite and API config

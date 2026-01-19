@@ -49,18 +49,18 @@ function Navbar() {
         </button>
 
         <div className="collapse navbar-collapse" id="mainNavbar">
-          <ul className="navbar-nav mx-auto gap-4 text-center">
+          <ul className="navbar-nav mx-auto  text-center">
             <li className="nav-item">
               <a className="nav-link" href="/">Home</a>
             </li>
-            <li className="nav-item">
+            <li className="nav-item mx-2">
               <a className="nav-link" href="/Shop/">Shop</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/About/">About</a>
+              <a className="nav-link mx-2" href="/About/">About</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/Contact/">Contact</a>
+              <a className="nav-link mx-2" href="/Contact/">Contact</a>
             </li>
           </ul>
 
