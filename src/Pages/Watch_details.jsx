@@ -13,7 +13,7 @@ function WatchDetails() {
 
   const [watch, setWatch] = useState(null);
   const [cart, setCart] = useState([]);
-  const [watches, setWatches] = useState([]); // all watches for collection
+  const [watches, setWatches] = useState([]); 
   const [showAddress, setShowAddress] = useState(false);
 
   const [address, setAddress] = useState({
@@ -26,27 +26,42 @@ function WatchDetails() {
 
   /* ================= FETCH WATCH ================= */
   useEffect(() => {
-    axios
-      .get("http://localhost:4000/Watches")
-      .then((res) => {
-        const found = res.data.find((w) => String(w.id) === String(id));
-        setWatch(found);
-        setWatches(res.data); // save all watches for collection
-      })
-      .catch((err) => console.error(err));
-  }, [id]);
+  axios
+    .get("/Watches.json")
+    .then((res) => {
+      const list = res.data.Watches;   // ✅ correct
+      const found = list.find(
+        (w) => String(w.id) === String(id)
+      );
+
+      setWatch(found);
+      setWatches(list);
+    })
+    .catch((err) => console.error(err));
+}, [id]);
+
 
   /* ================= LOAD CART ================= */
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(stored);
-  }, []);
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user) return;
+
+  const cartKey = `cart_${user.id}`;
+  const stored = JSON.parse(localStorage.getItem(cartKey)) || [];
+  setCart(stored);
+}, []);
+
 
   /* ================= CART HELPERS ================= */
-  const updateCart = (updated) => {
-    setCart(updated);
-    localStorage.setItem("cart", JSON.stringify(updated));
-  };
+ const updateCart = (updated) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user) return;
+
+  const cartKey = `cart_${user.id}`;
+  setCart(updated);
+  localStorage.setItem(cartKey, JSON.stringify(updated));
+};
+
 
   const increment = (id) => {
     updateCart(

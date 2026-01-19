@@ -116,11 +116,11 @@ Pincode: ${address.pincode}
         {data.map((item) => (
           <div key={item.id} className="row align-items-center border-bottom py-3">
             <div className="col-3">
-              <img
-                src={`${item.image}`}
-                className="img-fluid"
-                alt={item.name}
-              />
+            <img src={item.image}
+          className="img-fluid"
+             alt={item.name}
+        />
+
             </div>
 
             <div className="col-5">

@@ -9,7 +9,7 @@ import FooterSection from "../components/FooterSection";
 import ContactSection from "../components/ContactSection";
 
 
-const API_URL = "http://localhost:4000/Watches";
+const API_URL = " /Watches.json";
 
 function Collections() {
   const navigate = useNavigate();
@@ -28,17 +28,17 @@ function Collections() {
   });
 
   /* ================= FETCH WATCHES ================= */
-  useEffect(() => {
-    axios
-      .get(API_URL)
-      .then((res) => {
-        setWatches(res.data);
-        setSearchedWatches(res.data);
-      })
-      .catch((err) =>
-        console.error("Error fetching watches:", err)
-      );
-  }, []);
+ useEffect(() => {
+  axios
+    .get(API_URL)
+    .then((res) => {
+      setWatches(res.data.Watches);
+      setSearchedWatches(res.data.Watches);
+    })
+    .catch((err) =>
+      console.error("Error fetching watches:", err)
+    );
+}, []);
 
   /* ================= ADD TO CART ================= */
   const addToCart = (item) => {
@@ -46,6 +46,7 @@ function Collections() {
 
     if (!user) {
       alert("Please login first");
+       navigate("/login");
       return;
     }
 

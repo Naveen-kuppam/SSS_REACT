@@ -6,6 +6,7 @@ import axios from "axios";
 import "../Style/Home.css";
 import FooterSection from "../components/FooterSection";
 import ContactSection from "../components/ContactSection";
+import Cart from "./Cart";
 
 
 
@@ -15,16 +16,16 @@ function Home() {
 
   /* ---------------- FETCH WATCHES ---------------- */
   useEffect(() => {
-    axios
-      .get("http://localhost:4000/Watches")
-      .then((res) => {
-        // handle both array and object response
-        setWatches(res.data.watches || res.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching watches:", err);
-      });
-  }, []);
+  axios
+    .get("/Watches.json")
+    .then((res) => {
+      setWatches(res.data.Watches);
+    })
+    .catch((err) => {
+      console.error("Error fetching watches:", err);
+    });
+}, []);
+
 
   /* ---------------- ADD TO CART ---------------- */
   const addToCart = (item) => {
@@ -32,6 +33,7 @@ function Home() {
 
     if (!user) {
       alert("Please login first");
+       navigate("/login");
       return;
     }
 
