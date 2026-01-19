@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar";
 import aboutImg from "../assets/watch-5.jpg";
 import ContactSection from "../components/ContactSection";
 import FooterSection from "../components/FooterSection";
+import { Link } from "react-router-dom";
+
 
 function Contact() {
   return (

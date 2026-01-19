@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import '../Style/Search.css'
+import { Link } from "react-router-dom";
+
 
 function Search() {
   const [watches, setWatches] = useState([]);
