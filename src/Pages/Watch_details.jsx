@@ -5,7 +5,6 @@ import "../Style/Watch_details.css";
 import axios from "axios";
 import FooterSection from "../components/FooterSection";
 import ContactSection from "../components/ContactSection";
-import { Link } from "react-router-dom";
 
 
 function WatchDetails() {

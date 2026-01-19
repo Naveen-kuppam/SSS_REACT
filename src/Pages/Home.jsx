@@ -6,7 +6,6 @@ import axios from "axios";
 import "../Style/Home.css";
 import FooterSection from "../components/FooterSection";
 import ContactSection from "../components/ContactSection";
-import { Link } from "react-router-dom";
 
 
 

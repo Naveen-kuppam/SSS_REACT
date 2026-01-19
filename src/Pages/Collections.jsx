@@ -7,7 +7,6 @@ import axios from "axios";
 import "../Style/Collections.css";
 import FooterSection from "../components/FooterSection";
 import ContactSection from "../components/ContactSection";
-import { Link } from "react-router-dom";
 
 
 const API_URL = "http://localhost:4000/Watches";
